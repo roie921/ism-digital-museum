@@ -13,7 +13,7 @@ export default function Auth() {
       ? await supabase.auth.signInWithPassword({ email: f.email, password: f.password })
       : await supabase.auth.signUp({ email: f.email, password: f.password, options: { data: { display_name: f.name } } })
     if (error) return setMsg(error.message)
-    if (mode === 'register') { setMsg('Бүртгэл амжилттай. Имэйлээ баталгаажуулсны дараа нэвтэрнэ үү.'); return }
+    if (mode === 'register') { setMsg('Бүртгэл амжилттай.'); return }
     nav('/exhibits')
   }
   return (
