@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import { Link, NavLink, Route, Routes, Navigate } from 'react-router-dom'
 import { supabase } from './supabase'
 import Auth from './pages/Auth'
+import About from './pages/About'
 import { Home, Teachers, Events, EventDetail, Timeline } from './pages/Content'
 import { Exhibits, ExhibitDetail, ExhibitForm } from './pages/Exhibits'
 
@@ -26,7 +27,7 @@ export default function App() {
       <header className="bar">
         <Link to="/" className="logo">ISM Digital Museum</Link>
         <nav>
-          <NavLink to="/exhibits">Үзмэр</NavLink><NavLink to="/timeline">Time Machine</NavLink>
+          <NavLink to="/about">Тэнхимийн түүх</NavLink><NavLink to="/exhibits">Үзмэр</NavLink><NavLink to="/timeline">Time Machine</NavLink>
           <NavLink to="/teachers">Багш нар</NavLink><NavLink to="/events">Арга хэмжээ</NavLink>
           {user ? <><NavLink to="/exhibits/new">Бүтээл нэмэх</NavLink><button onClick={() => supabase.auth.signOut()}>Гарах</button></> : <NavLink to="/auth">Нэвтрэх</NavLink>}
         </nav>
@@ -42,6 +43,7 @@ export default function App() {
           <Route path="/events" element={<Events />} />
           <Route path="/events/:id" element={<EventDetail />} />
           <Route path="/timeline" element={<Timeline />} />
+          <Route path="/about" element={<About />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="*" element={<p className="note">Хуудас олдсонгүй.</p>} />
         </Routes>

@@ -25,17 +25,18 @@ export function Home() {
 }
 
 export function Teachers() {
-  const rows = useRows(() => supabase.from('teachers').select('*').order('name'))
+  const rows = useRows(() => supabase.from('teachers').select('*').order('id'))
   if (!rows) return <p className="note">Ачаалж байна…</p>
-  return (<><h1>Тэнхимийн багш нар</h1><div className="grid">{rows.map((t) => (
-    <div key={t.id} className="card pad">{t.photo_url && <img className="avatar" src={t.photo_url} alt={t.name} />}
-      <h3>{t.name}</h3><p className="meta">{t.position}</p><p>{t.bio}</p><p><b>Заадаг хичээл:</b> {t.courses}</p></div>))}</div></>)
+  return (<><h1>Тэнхимийн багш нар</h1><div className="grid people">{rows.map((t) => (
+    <div key={t.id} className="card person">
+      {t.photo_url ? <img className="avatar" src={t.photo_url} alt={t.name} /> : <span className="avatar ph">{t.name.slice(0, 1)}</span>}
+      <h3>{t.name}</h3><p className="meta">{t.position}</p></div>))}</div></>)
 }
 
 export function Events() {
   const rows = useRows(() => supabase.from('events').select('*').order('event_date', { ascending: false }))
   if (!rows) return <p className="note">Ачаалж байна…</p>
-  return (<><h1>Өдөрлөг, арга хэмжээ</h1><div className="grid">{rows.map((e) => (
+  return (<><h1>Өдөрлөг, арга хэмжээ</h1><div className="grid events">{rows.map((e) => (
     <Link key={e.id} to={`/events/${e.id}`} className="card">{e.cover_image_url && <img src={e.cover_image_url} alt={e.title} />}
       <div className="pad"><h3>{e.title}</h3><p className="meta">{e.event_date}</p></div></Link>))}</div></>)
 }
@@ -47,7 +48,11 @@ export function EventDetail() {
     supabase.from('event_photos').select('*').eq('event_id', id).then((r) => setPhotos(r.data || []))
   }, [id])
   if (!e) return <p className="note">Ачаалж байна…</p>
-  return (<><h1>{e.title}</h1><p className="meta">{e.event_date}</p><p>{e.description}</p>
+  return (<>
+    <article className="detail">
+      {e.cover_image_url && <img src={e.cover_image_url} alt={e.title} />}
+      <div><h1>{e.title}</h1><p className="meta">{e.event_date}</p><p className="pre">{e.description}</p></div>
+    </article>
     <h2>Зурагт цомог</h2>{photos.length === 0 ? <p className="note">Зураг одоогоор алга.</p> :
     <div className="grid">{photos.map((p) => <figure key={p.id} className="card"><img src={p.image_url} alt={p.caption || ''} loading="lazy" /><figcaption className="pad meta">{p.caption}</figcaption></figure>)}</div>}</>)
 }

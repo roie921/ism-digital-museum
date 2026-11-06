@@ -26,3 +26,23 @@ input,select,textarea{font:inherit;padding:9px 10px;border:1px solid var(--line)
 .year{font:700 1.4rem Newsreader,serif}.chip{display:inline-block;margin:0 8px 8px 0;padding:4px 12px;border-radius:999px;text-decoration:none;border:1px solid var(--blue)}
 .chip.event{background:var(--soft)}.chip.exhibit{background:#fff}
 @media(max-width:700px){.detail{grid-template-columns:1fr}.tl li{grid-template-columns:56px 1fr}}
+/* v2 дизайн */
+body{background:#f4f6fc}
+.bar{background:linear-gradient(90deg,#10098f,#1a0fd1);position:sticky;top:0;z-index:5}
+.bar nav a{padding:4px 12px;border-radius:999px}.bar nav a.active{background:rgba(255,255,255,.18);text-decoration:none}
+.hero{max-width:none;padding:48px 36px;margin-bottom:28px;border-radius:18px;color:#fff;background:linear-gradient(135deg,#10098f 0%,#2a4fb8 60%,#4fae9a 130%)}
+.hero h1{margin-top:0}.hero p{max-width:560px;opacity:.9}.hero .btn{background:#fff;color:#10098f;border-color:#fff}.hero .btn.ghost{background:transparent;color:#fff}
+.card{border-radius:14px;transition:transform .15s,box-shadow .15s}a.card:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(26,15,209,.14)}
+.people{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+.person{text-align:center;padding:22px 12px}
+.person .avatar{width:112px!important;height:112px;border-radius:50%;object-fit:cover;aspect-ratio:1;margin:0 auto 12px;display:block}
+.person .avatar.ph{display:grid;place-items:center;background:var(--soft);color:var(--blue);font:700 2.4rem Newsreader,serif}
+.person h3{font-size:1.1rem}
+.events img{aspect-ratio:1;object-fit:cover}.pre{white-space:pre-line}
+@media(prefers-reduced-motion:reduce){.card{transition:none}}
+.about-hero{position:relative;border-radius:18px;overflow:hidden;margin-bottom:24px;color:#fff;background:#10098f}
+.about-hero img{width:100%;max-height:420px;object-fit:cover;object-position:center 30%;display:block;opacity:.85}
+.about-hero div{position:absolute;inset:auto 0 0 0;padding:28px 24px 20px;background:linear-gradient(transparent,rgba(16,9,143,.92))}
+.about-hero h1{margin:0 0 4px;font-size:clamp(1.4rem,3.5vw,2.2rem)}.slogan{margin:0;font-style:italic;font-size:1.1rem}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}.two h2{margin-top:0}
+.plain{padding-left:20px}.plain li{margin:6px 0}.contact p{margin:4px 0}
