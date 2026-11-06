@@ -14,8 +14,8 @@ export function Home() {
     <>
       <section className="hero">
         <h1>Тэнхимийн түүх, багш нар, бүтээлүүд — нэг музейд.</h1>
-        <p>ISM Digital Museum-д оюутнуудын бүтээл, тэнхимийн арга хэмжээ, технологийн хөгжлийг он цагийн дарааллаар үзнэ.</p>
-        <Link className="btn" to="/timeline">ISM Time Machine нээх</Link> <Link className="btn ghost" to="/exhibits">Үзмэр үзэх</Link>
+        <p>ISM Museum-д оюутнуудын бүтээл, тэнхимийн арга хэмжээ, технологийн хөгжлийг он цагийн дарааллаар үзнэ.</p>
+        <Link className="btn" to="/timeline">Түүхэн замнал үзэх</Link> <Link className="btn ghost" to="/exhibits">Үзмэр үзэх</Link>
       </section>
       <h2>Сүүлд нэмэгдсэн</h2>
       {!latest ? <p className="note">Ачаалж байна…</p> : latest.length === 0 ? <p className="note">Одоогоор үзмэр алга. Нэвтэрч эхний бүтээлээ нэмээрэй.</p> :
@@ -57,13 +57,20 @@ export function EventDetail() {
     <div className="grid">{photos.map((p) => <figure key={p.id} className="card"><img src={p.image_url} alt={p.caption || ''} loading="lazy" /><figcaption className="pad meta">{p.caption}</figcaption></figure>)}</div>}</>)
 }
 
-// ISM Time Machine: арга хэмжээ + бүтээлийг он цагаар нэгтгэсэн timeline
+// Түүхэн замнал: тэнхимийн түүх, арга хэмжээ, бүтээлийг он цагаар нэгтгэсэн timeline
 export function Timeline() {
   const [items, setItems] = useState(null), [type, setType] = useState('all')
   useEffect(() => {
-    Promise.all([supabase.from('events').select('id,title,event_date'), supabase.from('exhibits').select('id,title,year_created')]).then(([ev, ex]) => {
-      const all = [...(ev.data || []).map((e) => ({ y: +e.event_date.slice(0, 4), t: e.title, kind: 'event', to: `/events/${e.id}` })),
-        ...(ex.data || []).map((x) => ({ y: x.year_created, t: x.title, kind: 'exhibit', to: `/exhibits/${x.id}` }))].filter((i) => i.y).sort((a, b) => a.y - b.y)
+    Promise.all([
+      supabase.from('events').select('id,title,event_date'),
+      supabase.from('exhibits').select('id,title,year_created'),
+      supabase.from('department_history').select('id,year,title,description'),
+    ]).then(([ev, ex, hi]) => {
+      const all = [
+        ...(hi.data || []).map((h) => ({ y: h.year, t: h.title, kind: 'stage', k: 'h' + h.id })),
+        ...(ev.data || []).map((e) => ({ y: +e.event_date.slice(0, 4), t: e.title, kind: 'event', k: 'e' + e.id, to: `/events/${e.id}` })),
+        ...(ex.data || []).map((x) => ({ y: x.year_created, t: x.title, kind: 'exhibit', k: 'x' + x.id, to: `/exhibits/${x.id}` })),
+      ].filter((i) => i.y).sort((a, b) => a.y - b.y)
       setItems(all)
     })
   }, [])
@@ -71,9 +78,11 @@ export function Timeline() {
   const shown = items.filter((i) => type === 'all' || i.kind === type)
   const years = [...new Set(shown.map((i) => i.y))]
   return (<>
-    <h1>ISM Time Machine</h1>
-    <div className="filters">{[['all', 'Бүгд'], ['event', 'Арга хэмжээ'], ['exhibit', 'Бүтээл']].map(([k, l]) => <button key={k} className={type === k ? 'btn' : 'btn ghost'} onClick={() => setType(k)}>{l}</button>)}</div>
+    <h1>Түүхэн замнал</h1>
+    <div className="filters">{[['all', 'Бүгд'], ['stage', 'Түүх'], ['event', 'Арга хэмжээ'], ['exhibit', 'Бүтээл']].map(([k, l]) => <button key={k} className={type === k ? 'btn' : 'btn ghost'} onClick={() => setType(k)}>{l}</button>)}</div>
     {years.length === 0 ? <p className="note">Энэ ангилалд бичлэг алга.</p> : <ol className="tl">{years.map((y) => (
-      <li key={y}><span className="year">{y}</span><div>{shown.filter((i) => i.y === y).map((i) => <Link key={i.kind + i.to} to={i.to} className={`chip ${i.kind}`}>{i.t}</Link>)}</div></li>))}</ol>}
+      <li key={y}><span className="year">{y}</span><div>{shown.filter((i) => i.y === y).map((i) => i.to
+        ? <Link key={i.k} to={i.to} className={`chip ${i.kind}`}>{i.t}</Link>
+        : <span key={i.k} className={`chip ${i.kind}`}>{i.t}</span>)}</div></li>))}</ol>}
   </>)
 }

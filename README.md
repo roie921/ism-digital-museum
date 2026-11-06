@@ -1,4 +1,4 @@
-# ISM Digital Museum
+# ISM MUSEUM
 Интерактив дижитал музейн веб аппликейшн (React + Vite + Supabase). **Бүтээлч шийдэл: ISM Time Machine** — арга хэмжээ, бүтээлийг он цагийн дарааллаар timeline-д нэгтгэнэ.
 
 ## Боломжууд
